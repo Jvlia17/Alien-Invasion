@@ -17,21 +17,28 @@ class AlienInvasion:
 
         pygame.display.set_caption("Inwazja obcych")
 
-        self.ship = Ship(self)
+        self.ship = Ship(self) # Atrybut self odnosi się tutaj do bieżącego egzemplarza AlienInvasion -> zapewnia to dostęp do obiektów takich jak screen
 
     def run_game(self):
         """Rozpoczęcie pętli głównej gry."""
         while True:
-            # Oczekiwane naciśnięcie klawisza lub przycisku myszy.
-            for event in pygame.event.get(): #Wbudowana pętla zdarzeń -> nasłuchuje zdarzeń i podejmuje odpowiednie działania.
-                if event.type == pygame.QUIT: #Jeśli gracz kliknie przycisk zamykający okno gry -> gra zostanie zakończona.
-                    sys.exit()
+            self._check_events() # To są tak zwane metody pomocnicze -> działa w klasie, ale nie jest przeznaczona do wywołania z poziomu egzemplarza.
+            self._update_screen()
 
-            #Odświeżanie ekranu w trakcie każdej iteracji pętli.
-            self.screen.fill(self.settings.bg_color)
-            self.ship.blitme()
+    def _check_events(self):
+        """Reakcja na zdarzenia generowane przez klawiaturę i mysz."""
 
-            pygame.display.flip() #Metoda będzie uaktualniać ekran, odzwierciedlając nowe położenie elementów i ukrywając te niepotrzebne.
+        # Oczekiwane naciśnięcie klawisza lub przycisku myszy.
+        for event in pygame.event.get():  # Wbudowana pętla zdarzeń -> nasłuchuje zdarzeń i podejmuje odpowiednie działania.
+            if event.type == pygame.QUIT:  # Jeśli gracz kliknie przycisk zamykający okno gry -> gra zostanie zakończona.
+                sys.exit()
+
+    def _update_screen(self):
+        """Uaktualnienie obrazów na ekranie i przejście do nowego ekranu."""
+        self.screen.fill(self.settings.bg_color)
+        self.ship.blitme()
+
+        pygame.display.flip()  # Metoda będzie uaktualniać ekran, odzwierciedlając nowe położenie elementów i ukrywając te niepotrzebne.
 
 if __name__ == '__main__':
     # Utworzenie egzemplarza gry i jej uruchomienie
