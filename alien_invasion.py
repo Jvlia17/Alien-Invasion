@@ -10,10 +10,12 @@ class AlienInvasion:
     def __init__(self):
         """Inicjalizacja gry i utworzenie jej zasobów."""
         pygame.init() #Inicjalizuje ustawienie tła
-
         self.settings = Settings()
-        self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height)) #Tworzenie okna o wymiarach 1200x800. Okno zostaje przypisane atrybutowi self.screen i będzie dostępne dla wszystkich metod.
+
+        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN) #Tworzenie okna o wymiarach 1200x800. Okno zostaje przypisane atrybutowi self.screen i będzie dostępne dla wszystkich metod.
         # Self.screen -> inaczej powierzchnia, na której będą wyświetlane elementy gry. W trakcie trwania gry powierzchnia będzie automatycznie odświeżana w trakcie każdej iteracji pętli.
+        self.settings.screen_width = self.screen.get_rect().width
+        self.settings.screen_height = self.screen.get_rect().height
 
         pygame.display.set_caption("Inwazja obcych")
 
@@ -34,15 +36,25 @@ class AlienInvasion:
             if event.type == pygame.QUIT:  # Jeśli gracz kliknie przycisk zamykający okno gry -> gra zostanie zakończona.
                 sys.exit()
             elif event.type == pygame.KEYDOWN: # KEYDOWN - zdarzenie naciśnięcia klawiszy
-                if event.key == pygame.K_RIGHT:
-                    self.ship.moving_right = True
-                elif event.key == pygame.K_LEFT:
-                    self.ship.moving_left = True
+                self._check_keydown_events(event)
             elif event.type == pygame.KEYUP: # KEYUP - zdarzenie zwolnienia klawisza (dodajemy to, aby można było przytrzymac klawisz poruszania się)
-                if event.key == pygame.K_RIGHT:
-                    self.ship.moving_right = False
-                elif event.key == pygame.K_LEFT:
-                    self.ship.moving_left = False
+                self._check_keyup_events(event)
+
+    def _check_keydown_events(self, event):
+        """Reakcja na naciśnięcie klawisza."""
+        if event.key == pygame.K_RIGHT:
+            self.ship.moving_right = True
+        elif event.key == pygame.K_LEFT:
+            self.ship.moving_left = True
+        elif event.key == pygame.K_q:
+            sys.exit()
+
+    def _check_keyup_events(self, event):
+        """Reakcja na zwolnienie klawisza."""
+        if event.key == pygame.K_RIGHT:
+            self.ship.moving_right = False
+        elif event.key == pygame.K_LEFT:
+            self.ship.moving_left = False
 
     def _update_screen(self):
         """Uaktualnienie obrazów na ekranie i przejście do nowego ekranu."""
