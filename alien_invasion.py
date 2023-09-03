@@ -23,6 +23,7 @@ class AlienInvasion:
         """Rozpoczęcie pętli głównej gry."""
         while True:
             self._check_events() # To są tak zwane metody pomocnicze -> działa w klasie, ale nie jest przeznaczona do wywołania z poziomu egzemplarza.
+            self.ship.update()
             self._update_screen()
 
     def _check_events(self):
@@ -32,6 +33,16 @@ class AlienInvasion:
         for event in pygame.event.get():  # Wbudowana pętla zdarzeń -> nasłuchuje zdarzeń i podejmuje odpowiednie działania.
             if event.type == pygame.QUIT:  # Jeśli gracz kliknie przycisk zamykający okno gry -> gra zostanie zakończona.
                 sys.exit()
+            elif event.type == pygame.KEYDOWN: # KEYDOWN - zdarzenie naciśnięcia klawiszy
+                if event.key == pygame.K_RIGHT:
+                    self.ship.moving_right = True
+                elif event.key == pygame.K_LEFT:
+                    self.ship.moving_left = True
+            elif event.type == pygame.KEYUP: # KEYUP - zdarzenie zwolnienia klawisza (dodajemy to, aby można było przytrzymac klawisz poruszania się)
+                if event.key == pygame.K_RIGHT:
+                    self.ship.moving_right = False
+                elif event.key == pygame.K_LEFT:
+                    self.ship.moving_left = False
 
     def _update_screen(self):
         """Uaktualnienie obrazów na ekranie i przejście do nowego ekranu."""
